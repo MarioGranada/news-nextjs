@@ -1,7 +1,7 @@
 import { NextResponse } from 'next/server';
 
 export const middleware = (request) => {
-  console.log('in here oe request', { request });
+  // console.log('in here oe request', { request });
   return NextResponse.next();
 };
 
