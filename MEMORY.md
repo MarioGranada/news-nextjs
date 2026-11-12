@@ -29,6 +29,7 @@ _Last updated: 2026-11-12_
 
 ## Next steps
 
+- Add tests for the archive filters and image routes.
 
 ---
 
