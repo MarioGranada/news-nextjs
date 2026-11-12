@@ -18,8 +18,7 @@ This document defines the non-negotiable foundations for this repository. Read i
 | Framework | Next.js 14 (App Router) | The project is an exercise in advanced App Router routing. |
 | Language | JavaScript | Course project uses JSX. |
 | Styling | Global CSS | Simple shared styles for the news layout. |
-| Backend | Express + better-sqlite3 | A small local API provides the news list. |
-| Data | SQLite + local dummy data | SQLite backs the API; archive widgets use local fixtures. |
+| Data | Supabase Postgres via `postgres` (postgres.js) | One hosted source for every news view; the Express + SQLite API was removed (2026-11-12) because SQLite cannot persist on Vercel. postgres.js is a small, dependency-free driver that works with Supabase's pooler. |
 
 **Rule of thumb:** a new dependency must solve a concrete problem that the current stack cannot solve cleanly. Justify it in the change that introduces it.
 
@@ -43,7 +42,7 @@ A routing/rendering exercise. The goal is to demonstrate App Router features cle
 
 ### 4. Data and State
 
-- The Express/SQLite API is the source for the news list; local fixtures power archive widgets.
+- Supabase Postgres (`news` schema) is the single source for the list, detail, archive and latest-news views. All queries live in `src/lib/news.js`.
 - No client cache or global store is used.
 - When unifying data, pick one source and remove the duplicate fixtures.
 
@@ -62,8 +61,8 @@ A routing/rendering exercise. The goal is to demonstrate App Router features cle
 ### 7. Deployment
 
 - Deploy the Next.js app to Vercel.
-- Move the Express API to a Node host or fold it into route handlers with Supabase.
-- Replace hardcoded localhost URLs with environment variables before deploying.
+- Data lives in the shared portfolio Supabase project; `POSTGRES_URL` comes from the Supabase ↔ Vercel integration.
+- Keep the daily keep-alive Cron (`vercel.json`) so the free project is not paused.
 
 ## What to Avoid
 

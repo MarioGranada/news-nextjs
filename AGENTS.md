@@ -6,20 +6,23 @@ Compact guide for future OpenCode sessions. It records only the facts an agent i
 
 | Command | Description |
 | --- | --- |
-| `cd backend && npm install && npm start` | Start the API on port 8080. |
-| `npm install && npm run dev` | Start Next.js on port 3000. |
+| `npm install` | Install dependencies. |
+| `vercel env pull .env.local` | Fetch `POSTGRES_URL` from the linked Vercel project. |
+| `npm run db:migrate` | Apply the idempotent schema + seed in `db/migration.sql`. |
+| `npm run dev` | Start Next.js on port 3000. |
 | `npm run build` | Verify the production build. |
 
 ## Requirements
 
-- Node.js 18+.
+- Node.js 22+.
 - npm (a `package-lock.json` is committed).
-- Two terminals: one for the API and one for Next.js.
+- A Postgres database (production: the shared portfolio Supabase project).
 
 ## Environment
 
-- No environment variables are used; the API URL is hardcoded.
-- If the API is moved, introduce an environment variable rather than editing multiple files.
+- `POSTGRES_URL` (required): pooled connection string injected by the Supabase ↔ Vercel integration.
+- `POSTGRES_URL_NON_POOLING` (optional): used by `npm run db:migrate`.
+- Documented in `.env.example`; never commit real values.
 
 ## Architecture
 
@@ -27,12 +30,14 @@ Compact guide for future OpenCode sessions. It records only the facts an agent i
 - `app/(content)/news/` — list, detail, image modal, layout.
 - `app/(content)/archive/` — parallel `@archive` and `@latest` routes.
 - `middleware.js` — `/news` matcher demo.
-- `backend/app.js` — Express + SQLite API.
-- `src/utils/newsUtils.js` — dummy-data archive helpers.
+- `src/lib/db.js` — shared postgres.js client (`prepare: false` for the Supabase transaction pooler).
+- `src/lib/news.js` — every news query (`news.news` table).
+- `db/migration.sql` + `scripts/db-migrate.mjs` — schema and seed.
+- `app/api/keep-alive/` + `vercel.json` — daily Cron that keeps the shared Supabase project awake.
 
 ## Commands and build order
 
-- Run both servers; the news page depends on port 8080.
+- `POSTGRES_URL` must be set for `npm run build`: database-backed pages are prerendered.
 - Use `npm run build` to validate route segment configuration.
 - `npm run lint` is the only static check; there are no tests.
 
@@ -41,7 +46,8 @@ Compact guide for future OpenCode sessions. It records only the facts an agent i
 - Parallel route slots must have a `default.jsx` for unmatched states.
 - The intercepting route only works for client-side navigation; a hard refresh shows the full image page.
 - Route groups do not affect the URL, but they do affect layouts.
-- The API and the archive helpers use different data sources.
+- Never import `src/lib/db.js` into a client component; the modal uses the client `ModalBackdrop` for interactivity.
+- The shared Supabase database hosts other apps' schemas too (`foodies`, `auth_demo`, `newsletter`); only touch `news`.
 
 ## Memory
 

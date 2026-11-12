@@ -1,35 +1,35 @@
 # Next News — Working Memory
 
-_Last updated: 2026-11-02_
+_Last updated: 2026-11-12_
 
 ## Current status
 
 - Route groups, parallel routes, intercepting image route, middleware, API handler, and error pages are implemented.
-- The Express + SQLite backend serves the news list on port 8080.
-- No tests or deployment workflow yet.
+- All news data comes from Supabase Postgres (`news` schema) via `src/lib/news.js`.
+- Linked to Vercel project `news-nextjs` (GitHub connected). Deployment waits on the Supabase integration being provisioned.
+- No tests yet.
 
 ## Key decisions
 
-- Kept a separate Express backend to practise client/server separation, as in the course.
-- Used local fixtures for archive filtering to focus the exercise on routing.
+- 2026-11-12: removed the Express + SQLite backend and `dummy-news.js`; one Postgres source for every view.
+- Shared portfolio Supabase project, one schema per app; this app owns `news`.
+- postgres.js with `prepare: false` (Supabase transaction pooler).
+- `/api/keep-alive` + daily Vercel Cron keep the free Supabase project awake for all portfolio apps.
 
 ## Known limitations and follow-ups
 
-- News list and archive widgets use different data sources.
-- API URL is hardcoded.
-- No production persistence story yet.
+- No admin UI for news; edit rows in Supabase.
+- `getAvailableNewsMonths` previously compared 0-based months; fixed by the SQL rewrite.
 
 ## Mistakes to avoid
 
-- Starting only Next.js leaves `/news` throwing on the failed fetch.
-- A hard refresh on the image URL shows the full page, not the modal.
+- Building without `POSTGRES_URL` fails: database-backed pages prerender at build time.
+- A hard refresh on the image URL shows the full page, not the modal (needs `@modal/default.jsx`).
 - Do not remove `default.jsx` from a parallel slot.
 
 ## Next steps
 
-- Unify the data source behind one API.
-- Move the API URL to an environment variable.
-- Migrate persistence to Supabase for a Vercel deployment.
+- Add the live URL to the README once deployed.
 
 ---
 
