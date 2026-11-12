@@ -13,3 +13,5 @@ coverage
 dist
 .next
 *.db
+.vercel
+.env*

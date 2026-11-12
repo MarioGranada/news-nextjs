@@ -1,19 +1,12 @@
-// import { DUMMY_NEWS } from '@/dummy-news';
 import NewsList from '@/src/components/NewsList';
+import { getAllNews } from '@/src/lib/news';
 
 const NewsPage = async () => {
-  const response = await fetch('http://localhost:8080/news');
-
-  if (!response.ok) {
-    throw new Error('Could not fetch data');
-  }
-
-  const news = await response.json();
+  const news = await getAllNews();
 
   return (
     <div>
       <h1>News Page</h1>
-      {/* <NewsList news={DUMMY_NEWS} /> */}
       <NewsList news={news} />
     </div>
   );

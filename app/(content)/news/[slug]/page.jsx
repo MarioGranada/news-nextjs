@@ -1,10 +1,10 @@
-import { DUMMY_NEWS } from '@/dummy-news';
 import Link from 'next/link';
 import { notFound } from 'next/navigation';
+import { getNewsItem } from '@/src/lib/news';
 
 const NewsDetailPage = async ({ params }) => {
   const { slug } = params;
-  const newsItem = DUMMY_NEWS.find((item) => item.slug === slug);
+  const newsItem = await getNewsItem(slug);
 
   if (!newsItem) {
     return notFound();
