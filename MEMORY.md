@@ -6,7 +6,7 @@ _Last updated: 2026-11-12_
 
 - Route groups, parallel routes, intercepting image route, middleware, API handler, and error pages are implemented.
 - All news data comes from Supabase Postgres (`news` schema) via `src/lib/news.js`.
-- Linked to Vercel project `news-nextjs` (GitHub connected). Deployment waits on the Supabase integration being provisioned.
+- Linked to Vercel project `news-nextjs` (GitHub connected). Live at https://news-nextjs-five.vercel.app since 2026-11-12.
 - No tests yet.
 
 ## Key decisions
@@ -29,7 +29,6 @@ _Last updated: 2026-11-12_
 
 ## Next steps
 
-- Add the live URL to the README once deployed.
 
 ---
 

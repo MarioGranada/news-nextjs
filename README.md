@@ -6,6 +6,14 @@ All news data (list, detail, image routes, archive filters and the latest-news p
 
 > **Follow-along project.** This app was built while following **Next.js 14 & React — The Complete Guide (Academind / Maximilian Schwarzüller)**. It is included in the portfolio as a learning exercise, not as a production product. The implementation is my own work based on the course material.
 
+## Live demo
+
+| | |
+| --- | --- |
+| **Live site** | https://news-nextjs-five.vercel.app |
+| **Repository** | https://github.com/MarioGranada/news-nextjs |
+| **Portfolio summary** | News site showcasing advanced Next.js App Router routing — route groups, parallel and intercepting routes, year/month archive filters — with articles served from Supabase Postgres. |
+
 ## Features
 
 - Marketing and content areas separated by route groups.
@@ -120,6 +128,7 @@ Route groups `(marketing)` and `(content)` separate the home page from the news/
 
 ## Deployment
 
+- **Live:** https://news-nextjs-five.vercel.app (Vercel production, deployed from `master`).
 - Target: Vercel, with data in the shared portfolio Supabase project (schema `news`). The Supabase ↔ Vercel integration injects `POSTGRES_URL` into every environment.
 - Run `npm run db:migrate` once against the Supabase database before the first deployment.
 - `vercel.json` schedules a daily Cron to `/api/keep-alive`, which runs `select 1` so the free Supabase project is not paused for inactivity. It covers every portfolio app that shares the database.
